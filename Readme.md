@@ -15,27 +15,31 @@ You could potentially use `objdump -r` and `objdump -t` and then somehow filter 
 
 Wouldn't it be nice if I could just do something like this:
 
-    relocs = [rel for sect in ELF('object.o') if sect.sh_type == elf.SHT_REL for rel in sect]
-    functions = [rel.symbol() for rel in relocs if rel.r_type in [R_ARM_CALL, R_ARM_JUMP24]]
-    imported_functions = [sym.name() for sym in functions if sym.st_shndx == SHN_UNDEF]
+```python
+relocs = [rel for sect in ELF('object.o') if sect.sh_type == elf.SHT_REL for rel in sect]
+functions = [rel.symbol() for rel in relocs if rel.r_type in [R_ARM_CALL, R_ARM_JUMP24]]
+imported_functions = [sym.name() for sym in functions if sym.st_shndx == SHN_UNDEF]
+```
 
 Or, for example, it makes sense to iterate over all the sections in an ELF file like this:
 
-    for section in ELF('libsomething.so'):
-        ...
+```python
+for section in ELF('libsomething.so'):
+    ...
+```
 
 # Support
 * Platforms:
- * ARM32
+    * ARM32
 * Features:
- * Iteration:
-  * Sections in an ELF file
-  * Symbols in symbol table sections
-  * Relocation entries in relocation table sections
- * Associate sections to their names
- * Associate symbols to their names
- * Associate relocation entries to their symbols
+    * Iteration:
+        * Sections in an ELF file
+        * Symbols in symbol table sections
+        * Relocation entries in relocation table sections
+    * Associate sections to their names
+    * Associate symbols to their names
+    * Associate relocation entries to their symbols
 * Objdump implementation (see `objdump.py`):
- * `-h`
- * `-t`/`-T`
- * `-r`
+    * `-h`
+    * `-t`/`-T`
+    * `-r`
