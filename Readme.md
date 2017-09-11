@@ -1,5 +1,5 @@
 # *p1000*?
-*p1000* is pronounced "PyELeF" (1000 in hebrew is אלף = elef).
+*p1000* is pronounced "PyELeF" (1000 in hebrew is אֶלֶף = elef).
 
 # Ahhh, so what's that?
 *p1000* is a library for parsing ELF files utilizing Python's strengths.
@@ -15,8 +15,9 @@ You could potentially use `objdump -r` and `objdump -t` and then somehow filter 
 
 Wouldn't it be nice if I could just do something like this:
 
-    function_relocs = [rel.symbol() for rel in ELF('object.o').relocs() if rel.r_type in [R_ARM_CALL, R_ARM_JUMP24]]
-    print [symbol.name() for symbol in function_relocs if symbol.st_shndx == SHN_UNDEF]
+    relocs = [rel for sect in ELF('object.o') if sect.sh_type == elf.SHT_REL for rel in sect]
+    functions = [rel.symbol() for rel in relocs if rel.r_type in [R_ARM_CALL, R_ARM_JUMP24]]
+    imported_functions = [sym.name() for sym in functions if sym.st_shndx == SHN_UNDEF]
 
 Or, for example, it makes sense to iterate over all the sections in an ELF file like this:
 
@@ -25,16 +26,16 @@ Or, for example, it makes sense to iterate over all the sections in an ELF file 
 
 # Support
 * Platforms:
-** ARM32
+ * ARM32
 * Features:
-** Iteration:
-*** Sections in an ELF file
-*** Symbols in symbol table sections
-*** Relocation entries in relocation table sections
-** Associate sections to their names
-** Associate symbols to their names
-** Associate relocation entries to their symbols
-* Objdump implementation:
-** `-h`
-** `-t`/`-T`
-** `-r`
+ * Iteration:
+  * Sections in an ELF file
+  * Symbols in symbol table sections
+  * Relocation entries in relocation table sections
+ * Associate sections to their names
+ * Associate symbols to their names
+ * Associate relocation entries to their symbols
+* Objdump implementation (see `objdump.py`):
+ * `-h`
+ * `-t`/`-T`
+ * `-r`
