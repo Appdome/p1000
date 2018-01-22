@@ -1,5 +1,5 @@
 # *p1000*?
-*p1000* is pronounced "PyELeF" (1000 in hebrew is אֶלֶף = elef).
+*p1000* is pronounced "PyELeF" (1000 in Hebrew is אֶלֶף = elef).
 
 # Ahhh, so what's that?
 *p1000* is a library for parsing ELF files utilizing Python's strengths.
