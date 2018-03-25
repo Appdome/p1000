@@ -8,8 +8,13 @@ class Section(object):
         self.elf = elf
         self.shdr = shdr
 
+    @property
     def name(self):
         return self.elf.shstrings.get(self.shdr['sh_name'])
+
+    @property
+    def raw(self):
+        return self.elf.raw[self.sh_offset:self.sh_offset + self.sh_size]
 
     def __getattr__(self, attr):
         return self.shdr.get(attr, None)
@@ -45,6 +50,7 @@ class Symbol(object):
         else:
             return self.sym.get(attr, None)
 
+    @property
     def name(self):
         return self.symtab.strtab().get(self.st_name)
 
@@ -83,6 +89,7 @@ class Reloc(object):
         else:
             return self.rel.get(attr, None)
 
+    @property
     def symbol(self):
         return self.table.symtab().symbol(self.r_sym)
 
@@ -174,6 +181,9 @@ class ELF32(object):
         for shdr in self.shdrs:
             name = self.shstrings.get(shdr['sh_name'])
             yield self.get_section_class(shdr)(self, shdr)
+
+    def __getitem__(self, key):
+        return self.section(name=key)
 
     def unpack(self, offset, spec, little_endian=True):
         endianesse = '<' if little_endian else '>'

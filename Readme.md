@@ -17,8 +17,8 @@ Wouldn't it be nice if I could just do something like this:
 
 ```python
 relocs = [rel for sect in ELF32('object.o') if sect.sh_type == elf.SHT_REL for rel in sect]
-functions = [rel.symbol() for rel in relocs if rel.r_type in [R_ARM_CALL, R_ARM_JUMP24]]
-imported_functions = [sym.name() for sym in functions if sym.st_shndx == SHN_UNDEF]
+functions = [rel.symbol for rel in relocs if rel.r_type in [R_ARM_CALL, R_ARM_JUMP24]]
+imported_functions = [sym.name for sym in functions if sym.st_shndx == SHN_UNDEF]
 ```
 
 Or, for example, it makes sense to iterate over all the sections in an ELF file like this:
